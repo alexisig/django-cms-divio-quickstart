@@ -16,6 +16,10 @@ services:
     links:
       - "database_default"
     env_file: .env-local
+    labels:
+      - traefik.http.services.djangocms.loadbalancer.server.port=80
+      - traefik.http.routers.djangocms.rule=Host(`hasura.alexisig.com`)
+      - traefik.http.routers.djangocms.tls.certresolver=le
 
   database_default:
     # Select one of the following db configurations for the database
@@ -26,3 +30,7 @@ services:
       SERVICE_MANAGER: "fsm-postgres"
     volumes:
       - ".:/app:rw"
+networks:
+  default:
+    external: 
+      name: gateway
